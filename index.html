@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+  <!-- ── PRIMARY SEO ── -->
+  <title>CLOCKSTRIKE — The Ultimate Timing Game | Free Online</title>
+  <meta name="description" content="CLOCKSTRIKE: Stop the clock hand at exactly the right moment. A hypnotic precision timing game. Free, no download, play instantly in your browser. How long can you survive?">
+  <meta name="keywords" content="timing game, clock game, reflex game, precision game, free online game, browser game, skill game, reaction time game, addictive game">
+  <meta name="author" content="CLOCKSTRIKE">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://clockstrikegame.github.io/clockstrike/">
+
+  <!-- ── OPEN GRAPH ── -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://clockstrikegame.github.io/clockstrike/">
+  <meta property="og:title" content="CLOCKSTRIKE — Stop the clock at the perfect moment">
+  <meta property="og:description" content="A hypnotic precision game. Stop the hand in the golden zone. Free, no download, play now.">
+  <meta property="og:image" content="https://clockstrikegame.github.io/clockstrike/og.png">
+
+  <!-- ── TWITTER ── -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CLOCKSTRIKE">
+  <meta name="twitter:description" content="Stop the clock at the perfect moment. Precision timing game, free online.">
+  <meta name="twitter:image" content="https://clockstrikegame.github.io/clockstrike/og.png">
+
+  <!-- ── STRUCTURED DATA ── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "CLOCKSTRIKE",
+    "description": "A precision timing game where you must stop a clock hand in the golden target zone before time runs out",
+    "genre": ["Casual", "Reflex", "Skill", "Timing"],
+    "gamePlatform": ["Web Browser", "Mobile", "Desktop"],
+    "operatingSystem": "Any",
+    "applicationCategory": "Game",
+    "url": "https://clockstrikegame.github.io/clockstrike/",
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+
+  <!-- ── FAVICON (inline SVG) ── -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='46' fill='%23080814' stroke='%23C9A84C' stroke-width='5'/><line x1='50' y1='50' x2='50' y2='14' stroke='white' stroke-width='4' stroke-linecap='round'/><circle cx='50' cy='50' r='5' fill='%23C9A84C'/></svg>">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='46' fill='%23080814' stroke='%23C9A84C' stroke-width='5'/><line x1='50' y1='50' x2='50' y2='14' stroke='white' stroke-width='4' stroke-linecap='round'/><circle cx='50' cy='50' r='5' fill='%23C9A84C'/></svg>">
+
+  <!-- ── FONTS ── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Noto+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- ── PWA ── -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#080814">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S60RK5GW7Z"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-S60RK5GW7Z');
+</script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #080814;
+      --bg2:    #0d0d1f;
+      --gold:   #C9A84C;
+      --glow:   #FFD700;
+      --white:  #F4F0E8;
+      --dim:    #5a5a7a;
+      --green:  #50FFAA;
+      --red:    #FF4C6A;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'Space Mono', monospace;
+      overflow: hidden;
+      touch-action: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    /* ── STARFIELD ── */
+    #stars {
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 0;
+      overflow: hidden;
+    }
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle linear infinite;
+    }
+    @keyframes twinkle {
+      0%,100% { opacity: 0.1; }
+      50% { opacity: 0.8; }
+    }
+
+    /* ── GAME CONTAINER ── */
+    #game {
+      position: relative;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+    }
+
+    /* ── TOP HUD ── */
+    #hud {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 18px 28px 0;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .stat { text-align: center; min-width: 70px; }
+    .stat-label {
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: var(--dim);
+      text-transform: uppercase;
+    }
+    .stat-val {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 30px;
+      line-height: 1.1;
+      letter-spacing: 2px;
+      color: var(--white);
+    }
+    .stat-val.gold { color: var(--gold); }
+
+    /* ── LIVES ── */
+    #lives-wrap { display: flex; gap: 7px; margin-top: 5px; justify-content: center; }
+    .orb {
+      width: 11px; height: 11px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 10px var(--gold);
+      transition: all 0.4s cubic-bezier(.34,1.56,.64,1);
+    }
+    .orb.dead {
+      background: transparent;
+      border: 1px solid rgba(201,168,76,0.2);
+      box-shadow: none;
+      transform: scale(0.7);
+    }
+
+    /* ── CANVAS ── */
+    #c {
+      display: block;
+      cursor: pointer;
+      border-radius: 50%;
+    }
+
+    /* ── COMBO ── */
+    #combo {
+      position: fixed;
+      bottom: 80px; left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Bebas Neue', cursive;
+      font-size: 22px;
+      color: var(--gold);
+      letter-spacing: 4px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 10;
+      pointer-events: none;
+      text-shadow: 0 0 20px var(--gold);
+    }
+
+    /* ── BOTTOM HINT ── */
+    #hint {
+      position: fixed;
+      bottom: 26px; left: 0; right: 0;
+      text-align: center;
+      z-index: 10;
+      pointer-events: none;
+    }
+    #hint-text {
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: var(--dim);
+      text-transform: uppercase;
+      animation: breathe 2.5s ease-in-out infinite;
+    }
+    @keyframes breathe {
+      0%,100% { opacity: 0.3; }
+      50% { opacity: 0.9; }
+    }
+
+    /* ── FLASH OVERLAY ── */
+    #flash {
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 20;
+      opacity: 0;
+    }
+
+    /* ── HIT TEXT ── */
+    #hit-text {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Bebas Neue', cursive;
+      font-size: 56px;
+      letter-spacing: 4px;
+      pointer-events: none; z-index: 30;
+      opacity: 0;
+      text-shadow: 0 0 40px currentColor;
+      transition: none;
+    }
+
+    /* ── LEVEL UP ── */
+    #lvlup {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Bebas Neue', cursive;
+      font-size: 44px;
+      letter-spacing: 6px;
+      color: var(--gold);
+      text-shadow: 0 0 30px var(--gold);
+      pointer-events: none; z-index: 25;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    /* ── LANG SELECTOR ── */
+    #langs {
+      position: fixed;
+      top: 16px; right: 16px;
+      z-index: 100;
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      max-width: 160px;
+      justify-content: flex-end;
+    }
+    .lbtn {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 1px;
+      background: transparent;
+      color: var(--dim);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 4px 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-radius: 2px;
+    }
+    .lbtn:hover, .lbtn.on {
+      color: var(--gold);
+      border-color: rgba(201,168,76,0.5);
+    }
+
+    /* ═══════════════════════════════════════
+       MENU SCREEN
+    ═══════════════════════════════════════ */
+    #menu {
+      position: fixed; inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      background: rgba(8,8,20,0.96);
+    }
+    .m-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(56px,14vw,110px);
+      letter-spacing: 8px;
+      color: var(--white);
+      text-shadow: 0 0 60px rgba(201,168,76,0.4);
+      line-height: 1;
+    }
+    .m-sub {
+      font-size: clamp(10px,2vw,13px);
+      letter-spacing: 4px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin: 10px 0 48px;
+      text-align: center;
+      padding: 0 20px;
+    }
+    /* Animated clock icon on menu */
+    .m-clock {
+      width: 110px; height: 110px;
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+      position: relative;
+      margin-bottom: 44px;
+      box-shadow: 0 0 40px rgba(201,168,76,0.2), inset 0 0 30px rgba(201,168,76,0.04);
+    }
+    .m-clock::before {
+      content: '';
+      position: absolute;
+      width: 2px; height: 36px;
+      background: var(--white);
+      border-radius: 2px;
+      bottom: 50%; left: calc(50% - 1px);
+      transform-origin: bottom center;
+      animation: spin 1.8s linear infinite;
+    }
+    .m-clock::after {
+      content: '';
+      position: absolute;
+      width: 8px; height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      box-shadow: 0 0 12px var(--gold);
+    }
+    /* Gold arc zone indicator on menu clock */
+    .m-arc {
+      position: absolute;
+      inset: -2px;
+      border-radius: 50%;
+      background: conic-gradient(
+        transparent 0deg,
+        transparent 60deg,
+        rgba(255,215,0,0.7) 60deg,
+        rgba(255,215,0,0.7) 100deg,
+        transparent 100deg,
+        transparent 360deg
+      );
+      mask: radial-gradient(circle, transparent 50px, black 51px);
+      -webkit-mask: radial-gradient(circle, transparent 50px, black 51px);
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    .m-btn {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 18px;
+      letter-spacing: 7px;
+      background: transparent;
+      color: var(--white);
+      border: 1px solid var(--gold);
+      padding: 15px 56px;
+      cursor: pointer;
+      transition: all 0.25s;
+      box-shadow: 0 0 24px rgba(201,168,76,0.15);
+    }
+    .m-btn:hover { background: var(--gold); color: var(--bg); box-shadow: 0 0 50px rgba(201,168,76,0.4); }
+    .m-btn:active { transform: scale(0.97); }
+    .m-best {
+      margin-top: 24px;
+      font-size: 11px;
+      color: var(--dim);
+      letter-spacing: 3px;
+    }
+    .m-howto {
+      margin-top: 10px;
+      font-size: 10px;
+      color: rgba(201,168,76,0.5);
+      letter-spacing: 2px;
+      text-align: center;
+      padding: 0 30px;
+    }
+
+    /* ═══════════════════════════════════════
+       GAME OVER SCREEN
+    ═══════════════════════════════════════ */
+    #gover {
+      position: fixed; inset: 0;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      background: rgba(8,8,20,0.97);
+    }
+    .go-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(46px,11vw,96px);
+      letter-spacing: 6px;
+      color: var(--red);
+      text-shadow: 0 0 50px rgba(255,76,106,0.5);
+    }
+    .go-label {
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: var(--dim);
+      margin: 18px 0 4px;
+    }
+    .go-score {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(88px,22vw,170px);
+      line-height: 1;
+      color: var(--white);
+      letter-spacing: 4px;
+    }
+    .go-new {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 18px;
+      letter-spacing: 5px;
+      color: var(--gold);
+      text-shadow: 0 0 20px var(--gold);
+      height: 28px;
+      margin: 6px 0 28px;
+    }
+
+    /* ── ARABIC font override ── */
+    [lang="ar"] .m-sub,
+    [lang="ar"] #hint-text,
+    [lang="ar"] .m-howto {
+      font-family: 'Noto Sans Arabic', sans-serif;
+      direction: rtl;
+      letter-spacing: 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── STARFIELD ── -->
+<div id="stars"></div>
+
+<!-- ── OVERLAYS ── -->
+<div id="flash"></div>
+<div id="hit-text"></div>
+<div id="lvlup"></div>
+
+<!-- ── LANG BUTTONS ── -->
+<div id="langs">
+  <button class="lbtn on"  onclick="setLang('en')">EN</button>
+  <button class="lbtn"     onclick="setLang('fr')">FR</button>
+  <button class="lbtn"     onclick="setLang('ar')">AR</button>
+  <button class="lbtn"     onclick="setLang('es')">ES</button>
+  <button class="lbtn"     onclick="setLang('zh')">中文</button>
+  <button class="lbtn"     onclick="setLang('de')">DE</button>
+</div>
+
+<!-- ── MENU ── -->
+<div id="menu">
+  <div class="m-title" id="m-title">CLOCKSTRIKE</div>
+  <div class="m-sub"   id="m-sub">Stop the clock. Hit the zone.</div>
+  <div class="m-clock"><div class="m-arc"></div></div>
+  <button class="m-btn" id="m-btn" onclick="startGame()">PLAY</button>
+  <div class="m-best"  id="m-best">BEST: 0</div>
+  <div class="m-howto" id="m-howto">Stop the hand in the golden zone</div>
+</div>
+
+<!-- ── GAME OVER ── -->
+<div id="gover">
+  <div class="go-title" id="go-title">GAME OVER</div>
+  <div class="go-label" id="go-label">SCORE</div>
+  <div class="go-score" id="go-score">0</div>
+  <div class="go-new"   id="go-new"></div>
+  <button class="m-btn" id="go-btn" onclick="startGame()">PLAY AGAIN</button>
+</div>
+
+<!-- ── GAME HUD ── -->
+<div id="game">
+  <div id="hud">
+    <div class="stat">
+      <div class="stat-label" id="lbl-score">SCORE</div>
+      <div class="stat-val"   id="disp-score">0</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label" id="lbl-lives">LIVES</div>
+      <div id="lives-wrap"></div>
+    </div>
+    <div class="stat" style="text-align:right">
+      <div class="stat-label" id="lbl-level">LEVEL</div>
+      <div class="stat-val gold" id="disp-level">1</div>
+    </div>
+  </div>
+
+  <canvas id="c"></canvas>
+
+  <div id="combo"></div>
+
+  <div id="hint"><div id="hint-text">TAP or SPACE to strike</div></div>
+</div>
+
+<script>
+// ╔══════════════════════════════════════╗
+// ║          TRANSLATIONS                ║
+// ╚══════════════════════════════════════╝
+const LANG = {
+  en: { title:"CLOCKSTRIKE", sub:"Stop the clock. Hit the zone.", play:"PLAY", again:"PLAY AGAIN", score:"SCORE", lives:"LIVES", level:"LEVEL", best:"BEST", perfect:"PERFECT!", good:"GOOD!", miss:"MISS!", gameover:"GAME OVER", hint:"TAP or SPACE to strike", howto:"Stop the hand in the golden zone", combo:"COMBO ×", lvlup:"LEVEL UP!", newbest:"✦ NEW BEST ✦" },
+  fr: { title:"CLOCKSTRIKE", sub:"Arrête l'horloge. Vise la zone.", play:"JOUER", again:"REJOUER", score:"SCORE", lives:"VIES", level:"NIVEAU", best:"MEILLEUR", perfect:"PARFAIT!", good:"BIEN!", miss:"RATÉ!", gameover:"PARTIE FINIE", hint:"APPUIE ou ESPACE", howto:"Arrête l'aiguille dans la zone dorée", combo:"COMBO ×", lvlup:"NIVEAU SUP!", newbest:"✦ NOUVEAU RECORD ✦" },
+  ar: { title:"كلوك سترايك", sub:"أوقف الساعة. اضرب المنطقة الذهبية.", play:"العب الآن", again:"العب مجدداً", score:"نقاط", lives:"أرواح", level:"مستوى", best:"أفضل", perfect:"مثالي!", good:"جيد!", miss:"فاتك!", gameover:"انتهت اللعبة", hint:"انقر أو اضغط مسافة", howto:"أوقف العقرب في المنطقة الذهبية", combo:"كومبو ×", lvlup:"ترقية مستوى!", newbest:"✦ رقم قياسي جديد ✦" },
+  es: { title:"CLOCKSTRIKE", sub:"Para el reloj. Acierta la zona.", play:"JUGAR", again:"JUGAR DE NUEVO", score:"PUNTOS", lives:"VIDAS", level:"NIVEL", best:"MEJOR", perfect:"¡PERFECTO!", good:"¡BIEN!", miss:"¡FALLO!", gameover:"FIN DEL JUEGO", hint:"TOCA o ESPACIO", howto:"Para la aguja en la zona dorada", combo:"COMBO ×", lvlup:"¡SUBIDA DE NIVEL!", newbest:"✦ NUEVO RÉCORD ✦" },
+  zh: { title:"时钟打击", sub:"停止时钟，击中区域", play:"开始游戏", again:"再玩一次", score:"分数", lives:"生命", level:"等级", best:"最高", perfect:"完美！", good:"好！", miss:"错过！", gameover:"游戏结束", hint:"点击或按空格键", howto:"将指针停在金色区域内", combo:"连击 ×", lvlup:"升级！", newbest:"✦ 新纪录 ✦" },
+  de: { title:"CLOCKSTRIKE", sub:"Stopp die Uhr. Triff die Zone.", play:"SPIELEN", again:"NOCHMAL SPIELEN", score:"PUNKTE", lives:"LEBEN", level:"LEVEL", best:"BESTE", perfect:"PERFEKT!", good:"GUT!", miss:"VERFEHLT!", gameover:"SPIEL VORBEI", hint:"TIPPE oder LEERTASTE", howto:"Stoppe den Zeiger in der goldenen Zone", combo:"COMBO ×", lvlup:"LEVEL AUF!", newbest:"✦ NEUER REKORD ✦" }
+};
+
+// ╔══════════════════════════════════════╗
+// ║             STARS BG                 ║
+// ╚══════════════════════════════════════╝
+(function() {
+  const wrap = document.getElementById('stars');
+  for (let i = 0; i < 80; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2 + 0.5;
+    s.style.cssText = `
+      width:${size}px; height:${size}px;
+      top:${Math.random()*100}%;
+      left:${Math.random()*100}%;
+      animation-duration:${2+Math.random()*4}s;
+      animation-delay:${Math.random()*4}s;
+    `;
+    wrap.appendChild(s);
+  }
+})();
+
+// ╔══════════════════════════════════════╗
+// ║              STATE                   ║
+// ╚══════════════════════════════════════╝
+let lang        = 'en';
+let state       = 'menu';   // 'menu' | 'playing' | 'gameover'
+let score       = 0;
+let best        = +localStorage.getItem('cs_best') || 0;
+let lives       = 3;
+let level       = 1;
+let combo       = 0;
+let hAngle      = Math.PI * 1.5; // 12 o'clock in 0–2π space
+let hSpeed      = 0.024;
+let zStart      = 0;
+let zSize       = Math.PI / 2.4;
+let particles   = [];
+let raf;
+let lastT       = 0;
+let canSz       = 300;
+
+// ── DOM refs ──
+const canvas     = document.getElementById('c');
+const ctx        = canvas.getContext('2d');
+const menuEl     = document.getElementById('menu');
+const goverEl    = document.getElementById('gover');
+const dispScore  = document.getElementById('disp-score');
+const dispLevel  = document.getElementById('disp-level');
+const livesWrap  = document.getElementById('lives-wrap');
+const flashEl    = document.getElementById('flash');
+const hitTxt     = document.getElementById('hit-text');
+const comboEl    = document.getElementById('combo');
+const lvlupEl    = document.getElementById('lvlup');
+
+// ╔══════════════════════════════════════╗
+// ║            LANGUAGE                  ║
+// ╚══════════════════════════════════════╝
+function detectLang() {
+  const code = (navigator.language || 'en').split('-')[0].toLowerCase();
+  const map = { zh:'zh', yue:'zh', cmn:'zh', ar:'ar', fr:'fr', es:'es', pt:'es', it:'fr', de:'de', nl:'de' };
+  return LANG[code] ? code : (map[code] || 'en');
+}
+
+function t(k) { return (LANG[lang]||LANG.en)[k] || k; }
+
+function setLang(l) {
+  lang = l;
+  document.documentElement.lang = l;
+  document.querySelectorAll('.lbtn').forEach(b => {
+    b.classList.toggle('on', b.textContent.trim() === (l === 'zh' ? '中文' : l.toUpperCase()));
+  });
+  refreshUI();
+}
+
+function refreshUI() {
+  document.getElementById('m-title').textContent  = t('title');
+  document.getElementById('m-sub').textContent    = t('sub');
+  document.getElementById('m-btn').textContent    = t('play');
+  document.getElementById('m-best').textContent   = t('best') + ': ' + best;
+  document.getElementById('m-howto').textContent  = t('howto');
+  document.getElementById('go-title').textContent = t('gameover');
+  document.getElementById('go-label').textContent = t('score');
+  document.getElementById('go-btn').textContent   = t('again');
+  document.getElementById('lbl-score').textContent= t('score');
+  document.getElementById('lbl-lives').textContent= t('lives');
+  document.getElementById('lbl-level').textContent= t('level');
+  document.getElementById('hint-text').textContent= t('hint');
+  lvlupEl.textContent = t('lvlup');
+}
+
+// ╔══════════════════════════════════════╗
+// ║           CANVAS RESIZE              ║
+// ╚══════════════════════════════════════╝
+function resize() {
+  const pad = 160;
+  canSz = Math.min(window.innerWidth - 20, window.innerHeight - pad, 520);
+  canvas.width = canvas.height = canSz;
+  canvas.style.width = canvas.style.height = canSz + 'px';
+}
+window.addEventListener('resize', resize);
+resize();
+
+// ╔══════════════════════════════════════╗
+// ║             AUDIO                    ║
+// ╚══════════════════════════════════════╝
+let ac = null;
+function getAC() {
+  if (!ac) { try { ac = new (window.AudioContext||window.webkitAudioContext)(); } catch(e){} }
+  return ac;
+}
+function beep(freq, dur, type='sine', vol=0.3) {
+  const a = getAC(); if (!a) return;
+  try {
+    const o = a.createOscillator(), g = a.createGain();
+    o.connect(g); g.connect(a.destination);
+    o.type = type;
+    o.frequency.setValueAtTime(freq, a.currentTime);
+    o.frequency.exponentialRampToValueAtTime(freq * 0.6, a.currentTime + dur);
+    g.gain.setValueAtTime(vol, a.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, a.currentTime + dur);
+    o.start(a.currentTime); o.stop(a.currentTime + dur);
+  } catch(e) {}
+}
+function sndHit(perf) {
+  if (perf) { beep(880,.12,'sine',.4); setTimeout(()=>beep(1320,.18,'sine',.3),80); setTimeout(()=>beep(1760,.25,'sine',.2),160); }
+  else       { beep(660,.1,'sine',.3); setTimeout(()=>beep(880,.14,'sine',.2),60); }
+}
+function sndMiss() { beep(200,.35,'sawtooth',.2); setTimeout(()=>beep(150,.4,'sawtooth',.15),120); }
+function sndLvl()  { [523,659,784,1047].forEach((f,i)=>setTimeout(()=>beep(f,.12,'sine',.35),i*100)); }
+
+// ╔══════════════════════════════════════╗
+// ║           PARTICLES                  ║
+// ╚══════════════════════════════════════╝
+function burst(x, y, color, n=14) {
+  for (let i=0;i<n;i++) {
+    const a = (Math.PI*2*i/n) + Math.random()*0.6;
+    const sp = 2.5 + Math.random()*4;
+    particles.push({ x,y, vx:Math.cos(a)*sp, vy:Math.sin(a)*sp, life:1, decay:.025+Math.random()*.02, r:2+Math.random()*4, color });
+  }
+}
+function stepParticles() {
+  particles = particles.filter(p=>p.life>0);
+  particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vx*=.93;p.vy*=.93;p.life-=p.decay;p.r*=.97;});
+}
+function drawParticles() {
+  particles.forEach(p=>{
+    ctx.save();
+    ctx.globalAlpha = p.life;
+    ctx.fillStyle   = p.color;
+    ctx.shadowBlur  = 8; ctx.shadowColor = p.color;
+    ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+    ctx.restore();
+  });
+}
+
+// ╔══════════════════════════════════════╗
+// ║          CLOCK DRAWING               ║
+// ╚══════════════════════════════════════╝
+function draw() {
+  const W = canSz, H = canSz;
+  const cx = W/2, cy = H/2;
+  const R  = W * 0.41;
+
+  ctx.clearRect(0,0,W,H);
+
+  // Face gradient
+  const fg = ctx.createRadialGradient(cx,cy,0,cx,cy,R);
+  fg.addColorStop(0,'#13132a'); fg.addColorStop(1,'#08080f');
+  ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2);
+  ctx.fillStyle = fg; ctx.fill();
+
+  // Outer glow ring
+  ctx.save();
+  ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2);
+  ctx.strokeStyle = 'rgba(201,168,76,0.5)'; ctx.lineWidth = 2;
+  ctx.shadowBlur=20; ctx.shadowColor='rgba(201,168,76,0.4)';
+  ctx.stroke();
+  ctx.strokeStyle='rgba(201,168,76,0.08)'; ctx.lineWidth=10; ctx.shadowBlur=0;
+  ctx.stroke();
+  ctx.restore();
+
+  // Target zone
+  if (state==='playing') drawZone(cx,cy,R);
+
+  // Ticks
+  drawTicks(cx,cy,R);
+
+  // Decorative inner ring
+  ctx.save();
+  ctx.beginPath(); ctx.arc(cx,cy,R*0.84,0,Math.PI*2);
+  ctx.strokeStyle='rgba(201,168,76,0.06)'; ctx.lineWidth=1; ctx.stroke();
+  ctx.restore();
+
+  // Hand
+  if (state!=='menu') drawHand(cx,cy,R);
+
+  // Center jewel
+  ctx.save();
+  ctx.beginPath(); ctx.arc(cx,cy,5,0,Math.PI*2);
+  ctx.fillStyle='#C9A84C';
+  ctx.shadowBlur=20; ctx.shadowColor='#C9A84C'; ctx.fill();
+  ctx.restore();
+
+  drawParticles();
+}
+
+function drawZone(cx,cy,R) {
+  const end = zStart + zSize;
+
+  // Zone fill
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx,cy,R,zStart,end);
+  ctx.arc(cx,cy,R*0.72,end,zStart,true);
+  ctx.closePath();
+  const g = ctx.createRadialGradient(cx,cy,R*0.72,cx,cy,R);
+  g.addColorStop(0,'rgba(201,168,76,0.04)');
+  g.addColorStop(1,'rgba(255,215,0,0.18)');
+  ctx.fillStyle = g; ctx.fill();
+
+  // Zone border arc
+  ctx.beginPath(); ctx.arc(cx,cy,R,zStart,end);
+  ctx.strokeStyle='#FFD700'; ctx.lineWidth=5;
+  ctx.shadowBlur=25; ctx.shadowColor='#FFD700'; ctx.stroke();
+
+  // Zone end caps
+  [zStart, end].forEach(a=>{
+    const bx=cx+Math.cos(a)*R, by=cy+Math.sin(a)*R;
+    ctx.beginPath(); ctx.arc(bx,by,3.5,0,Math.PI*2);
+    ctx.fillStyle='#FFD700'; ctx.fill();
+  });
+
+  // Center marker of zone
+  const mid = zStart + zSize/2;
+  const mx=cx+Math.cos(mid)*R, my=cy+Math.sin(mid)*R;
+  ctx.beginPath(); ctx.arc(mx,my,5,0,Math.PI*2);
+  ctx.fillStyle='#FFF'; ctx.shadowBlur=12; ctx.shadowColor='#FFD700'; ctx.fill();
+  ctx.restore();
+}
+
+function drawTicks(cx,cy,R) {
+  for (let i=0;i<60;i++) {
+    const a = (Math.PI*2*i/60) - Math.PI/2 + Math.PI/2; // aligned so 0=3 o'clock matches canvas coords
+    // Actually: tick 0 = 12 o'clock visual
+    const angle = (Math.PI*2*i/60) + Math.PI*1.5 - Math.PI/2;
+    const big   = i%5===0;
+    const r1=R*0.97, r2=big?R*0.82:R*0.90;
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(cx+Math.cos(angle)*r1, cy+Math.sin(angle)*r1);
+    ctx.lineTo(cx+Math.cos(angle)*r2, cy+Math.sin(angle)*r2);
+    ctx.strokeStyle = big?'rgba(201,168,76,0.75)':'rgba(255,255,255,0.12)';
+    ctx.lineWidth   = big?2:1;
+    ctx.stroke(); ctx.restore();
+  }
+}
+
+function drawHand(cx,cy,R) {
+  const len  = R*0.73;
+  const tx   = cx+Math.cos(hAngle)*len;
+  const ty   = cy+Math.sin(hAngle)*len;
+  const bx   = cx+Math.cos(hAngle+Math.PI)*R*0.18;
+  const by_  = cy+Math.sin(hAngle+Math.PI)*R*0.18;
+
+  ctx.save();
+  // Tail
+  ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(bx,by_);
+  ctx.strokeStyle='rgba(201,168,76,0.45)'; ctx.lineWidth=2.5; ctx.lineCap='round'; ctx.stroke();
+  // Body
+  ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(tx,ty);
+  ctx.strokeStyle='rgba(255,255,255,0.9)'; ctx.lineWidth=2.5;
+  ctx.shadowBlur=18; ctx.shadowColor='rgba(255,255,255,0.8)'; ctx.stroke();
+  // Tip
+  ctx.beginPath(); ctx.arc(tx,ty,4,0,Math.PI*2);
+  ctx.fillStyle='#fff'; ctx.shadowBlur=22; ctx.fill();
+  ctx.restore();
+}
+
+// ╔══════════════════════════════════════╗
+// ║           GAME LOGIC                 ║
+// ╚══════════════════════════════════════╝
+function norm(a) { return ((a % (Math.PI*2)) + Math.PI*2) % (Math.PI*2); }
+
+function inZone(a) {
+  const na = norm(a), ns = norm(zStart), ne = ns + zSize;
+  if (ne > Math.PI*2) return na >= ns || na <= ne - Math.PI*2;
+  return na >= ns && na <= ne;
+}
+
+function precision() {
+  const na = norm(hAngle), ns = norm(zStart);
+  const center = ns + zSize/2;
+  let d = Math.abs(norm(na) - norm(center));
+  if (d > Math.PI) d = Math.PI*2 - d;
+  return Math.max(0, 1 - d/(zSize/2));
+}
+
+function placeZone() {
+  let tries=0;
+  do { zStart = Math.random()*Math.PI*2; tries++; }
+  while (tries<20 && inZone(hAngle));
+}
+
+function startGame() {
+  menuEl.style.display = 'none';
+  goverEl.style.display = 'none';
+  score=0; lives=3; level=1; combo=0;
+  hAngle = Math.PI*1.5; hSpeed=0.024;
+  zSize  = Math.PI/2.4; particles=[];
+  state  = 'playing';
+  placeZone();
+  renderLives(); renderScore(); dispLevel.textContent=1;
+  if (raf) cancelAnimationFrame(raf);
+  lastT = performance.now();
+  raf = requestAnimationFrame(loop);
+}
+
+function strike() {
+  if (state!=='playing') return;
+  const R   = canSz*0.41;
+  const tx  = canSz/2 + Math.cos(hAngle)*R*0.73;
+  const ty  = canSz/2 + Math.sin(hAngle)*R*0.73;
+
+  if (inZone(hAngle)) {
+    const perf  = precision() > 0.72;
+    const pts   = perf ? 100+combo*12 : 50+combo*6;
+    score += pts; combo++;
+
+    const newLv = Math.min(10, Math.floor(combo/5)+1);
+    if (newLv > level) {
+      level   = newLv;
+      hSpeed  = 0.024 + (level-1)*0.007;
+      zSize   = Math.max(Math.PI/13, Math.PI/2.4 - (level-1)*0.16);
+      showLvl(); sndLvl();
+    } else { sndHit(perf); }
+
+    burst(tx,ty, perf?'#FFD700':'#50FFAA', perf?22:14);
+    showHit(perf?t('perfect'):t('good'), perf?'#FFD700':'#50FFAA');
+    doFlash(perf?'rgba(201,168,76,0.14)':'rgba(80,255,170,0.1)');
+    placeZone();
+    renderCombo();
+
+  } else {
+    lives--; combo=0;
+    sndMiss();
+    burst(tx,ty,'#FF4C6A',9);
+    showHit(t('miss'),'#FF4C6A');
+    doFlash('rgba(255,76,106,0.2)');
+    renderLives(); renderCombo();
+    if (lives<=0) { endGame(); return; }
+  }
+  renderScore();
+  dispLevel.textContent = level;
+}
+
+function endGame() {
+  state = 'gameover';
+  const isNew = score > best;
+  if (isNew) { best=score; localStorage.setItem('cs_best',best); }
+  setTimeout(()=>{
+    document.getElementById('go-score').textContent = score;
+    document.getElementById('go-new').textContent   = isNew ? t('newbest') : '';
+    document.getElementById('m-best').textContent   = t('best')+': '+best;
+    goverEl.style.display='flex';
+  }, 900);
+}
+
+// ╔══════════════════════════════════════╗
+// ║            UI HELPERS                ║
+// ╚══════════════════════════════════════╝
+function renderScore() { dispScore.textContent = score; }
+
+function renderLives() {
+  livesWrap.innerHTML='';
+  for(let i=0;i<3;i++){
+    const d=document.createElement('div');
+    d.className='orb'+(i>=lives?' dead':'');
+    livesWrap.appendChild(d);
+  }
+}
+
+function renderCombo() {
+  if(combo>=2){ comboEl.textContent=t('combo')+combo; comboEl.style.opacity='1'; }
+  else         { comboEl.style.opacity='0'; }
+}
+
+function showHit(txt, col) {
+  hitTxt.textContent=txt; hitTxt.style.color=col;
+  hitTxt.style.transition='none';
+  hitTxt.style.opacity='1'; hitTxt.style.transform='translate(-50%,-55%)';
+  requestAnimationFrame(()=>{ requestAnimationFrame(()=>{
+    hitTxt.style.transition='all 0.65s cubic-bezier(.17,.67,.83,.67)';
+    hitTxt.style.opacity='0'; hitTxt.style.transform='translate(-50%,-80%)';
+  });});
+}
+
+function doFlash(col) {
+  flashEl.style.background=col; flashEl.style.transition='none'; flashEl.style.opacity='1';
+  requestAnimationFrame(()=>{ requestAnimationFrame(()=>{
+    flashEl.style.transition='opacity 0.35s'; flashEl.style.opacity='0';
+  });});
+}
+
+function showLvl() {
+  lvlupEl.style.opacity='1'; dispLevel.textContent=level;
+  setTimeout(()=>{ lvlupEl.style.opacity='0'; },1300);
+}
+
+// ╔══════════════════════════════════════╗
+// ║             GAME LOOP                ║
+// ╚══════════════════════════════════════╝
+function loop(ts) {
+  const dt = Math.min((ts-lastT)/16.67, 3);
+  lastT = ts;
+
+  if (state==='playing') {
+    hAngle = norm(hAngle + hSpeed*dt);
+    stepParticles();
+    draw();
+  } else if (state==='gameover' && particles.length>0) {
+    stepParticles(); draw();
+  }
+
+  raf = requestAnimationFrame(loop);
+}
+
+// ╔══════════════════════════════════════╗
+// ║             INPUTS                   ║
+// ╚══════════════════════════════════════╝
+document.addEventListener('keydown', e=>{
+  if (e.code==='Space'||e.key===' ') { e.preventDefault(); strike(); }
+});
+canvas.addEventListener('click', ()=>strike());
+canvas.addEventListener('touchstart', e=>{ e.preventDefault(); strike(); },{ passive:false });
+
+// ── prevent context menu on long press (mobile) ──
+document.addEventListener('contextmenu', e=>e.preventDefault());
+
+// ╔══════════════════════════════════════╗
+// ║               INIT                   ║
+// ╚══════════════════════════════════════╝
+lang = detectLang();
+document.querySelectorAll('.lbtn').forEach(b=>{
+  b.classList.toggle('on', b.textContent.trim()===(lang==='zh'?'中文':lang.toUpperCase()));
+});
+refreshUI();
+renderLives();
+document.getElementById('m-best').textContent = t('best')+': '+best;
+lastT = performance.now();
+raf = requestAnimationFrame(loop);
+</script>
+</body>
+</html>

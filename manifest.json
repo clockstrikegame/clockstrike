@@ -1,0 +1,20 @@
+{
+  "name": "CLOCKSTRIKE",
+  "short_name": "CLOCKSTRIKE",
+  "description": "Stop the clock hand in the golden zone. A hypnotic precision timing game.",
+  "start_url": "./",
+  "display": "fullscreen",
+  "orientation": "portrait-primary",
+  "background_color": "#080814",
+  "theme_color": "#080814",
+  "lang": "en",
+  "categories": ["games", "entertainment"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' fill='%23080814' rx='80'/><circle cx='256' cy='256' r='200' fill='none' stroke='%23C9A84C' stroke-width='20'/><line x1='256' y1='256' x2='256' y2='100' stroke='white' stroke-width='18' stroke-linecap='round'/><circle cx='256' cy='256' r='22' fill='%23C9A84C'/></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
